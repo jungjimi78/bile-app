@@ -1,0 +1,659 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>사무엘상 31일 질문</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",Arial,sans-serif;color:#1f1f22}
+body{
+  background:
+    radial-gradient(circle at 15% 10%, #ffe0b7 0, transparent 28%),
+    radial-gradient(circle at 85% 0%, #dce9ff 0, transparent 32%),
+    linear-gradient(135deg,#fff6e9,#eef4ff);
+  padding:max(18px,env(safe-area-inset-top)) 18px max(18px,env(safe-area-inset-bottom));
+}
+.app{width:min(620px,100%);margin:0 auto}
+header{text-align:center;padding:16px 0 12px}
+header h2{margin:0;font-size:28px;letter-spacing:-.7px}
+header p{margin:7px 0 0;color:#777;font-size:15px}
+.card{
+  display:none;
+  background:rgba(255,255,255,.94);
+  border-radius:34px;
+  box-shadow:0 18px 55px rgba(40,40,60,.14);
+  padding:26px 22px 22px;
+}
+#day1{display:block}
+.card:target{display:block}
+body:has(.card:target) #day1{display:none}
+.topline{display:flex;justify-content:space-between;color:#888;font-weight:800;font-size:13px}
+h1{margin:20px 0 6px;font-size:42px;line-height:1.05;letter-spacing:-1.5px;text-align:center}
+.subtitle{margin:0 0 22px;text-align:center;color:#777;font-size:16px;font-weight:700}
+.question{
+  min-height:145px;background:#fff2d9;border-radius:28px;padding:24px 20px;
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  font-size:23px;line-height:1.48;font-weight:900;word-break:keep-all;
+}
+.memoWrap{margin-top:18px}
+label{display:block;color:#666;font-weight:900;font-size:15px;margin:0 0 8px 4px}
+textarea{
+  width:100%;min-height:120px;border:0;outline:none;resize:vertical;
+  border-radius:22px;background:#f6f2eb;padding:16px;font-size:18px;
+  line-height:1.45;font-family:inherit;
+}
+.status{min-height:24px;color:#777;font-size:14px;margin:8px 0 0 4px}
+.buttons{display:flex;gap:12px;justify-content:center;margin-top:16px}
+.btn{flex:1;max-width:190px;text-align:center;text-decoration:none;border-radius:19px;padding:16px 12px;font-size:19px;font-weight:900}
+.light{background:#ebe5dc;color:#222}
+.dark{background:#202020;color:white}
+.jump{margin-top:18px;background:rgba(255,255,255,.55);border-radius:24px;padding:14px;display:grid;grid-template-columns:repeat(8,1fr);gap:8px}
+.jump a{text-decoration:none;text-align:center;padding:9px 0;border-radius:13px;background:rgba(255,255,255,.88);color:#333;font-weight:900;font-size:13px}
+.tip{text-align:center;color:#777;font-size:13px;line-height:1.45;margin:14px 4px 0}
+@supports not selector(:has(*)){
+  .card{display:block;margin-bottom:18px}
+  .jump{display:none}
+}
+@media(max-width:390px){
+  h1{font-size:36px}
+  .question{font-size:21px;min-height:140px}
+  .jump{grid-template-columns:repeat(6,1fr)}
+}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+  <div style="font-size:36px;margin-bottom:8px;">📖</div>
+  <h2>사무엘상 31일 질문</h2>
+  <p>질문도 보이고, 장마다 메모도 자동 저장돼</p>
+</header>
+
+
+<section class="card" id="day1">
+  <div class="topline"><span>DAY 1</span><span>1/31</span></div>
+  <h1>사무엘상 1장</h1>
+  <p class="subtitle">한나의 기도와 사무엘의 탄생</p>
+  <div class="question">나는 힘들 때 하느님께 솔직하게 말하는 편인가?</div>
+
+  <div class="memoWrap">
+    <label for="memo1">오늘 한 줄 메모</label>
+    <textarea id="memo1" placeholder="여기에 적으면 1장에 자동 저장돼" oninput="saveMemo(1)"></textarea>
+    <div class="status" id="status1">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day31">← 이전</a>
+    <a class="btn dark" href="#day2">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day2">
+  <div class="topline"><span>DAY 2</span><span>2/31</span></div>
+  <h1>사무엘상 2장</h1>
+  <p class="subtitle">한나의 찬가와 엘리 집안</p>
+  <div class="question">하느님은 어떤 사람을 높이시고 어떤 사람을 낮추실까?</div>
+
+  <div class="memoWrap">
+    <label for="memo2">오늘 한 줄 메모</label>
+    <textarea id="memo2" placeholder="여기에 적으면 2장에 자동 저장돼" oninput="saveMemo(2)"></textarea>
+    <div class="status" id="status2">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day1">← 이전</a>
+    <a class="btn dark" href="#day3">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day3">
+  <div class="topline"><span>DAY 3</span><span>3/31</span></div>
+  <h1>사무엘상 3장</h1>
+  <p class="subtitle">사무엘이 부르심을 받음</p>
+  <div class="question">나는 하느님의 부르심을 들으려고 노력하고 있나?</div>
+
+  <div class="memoWrap">
+    <label for="memo3">오늘 한 줄 메모</label>
+    <textarea id="memo3" placeholder="여기에 적으면 3장에 자동 저장돼" oninput="saveMemo(3)"></textarea>
+    <div class="status" id="status3">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day2">← 이전</a>
+    <a class="btn dark" href="#day4">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day4">
+  <div class="topline"><span>DAY 4</span><span>4/31</span></div>
+  <h1>사무엘상 4장</h1>
+  <p class="subtitle">계약 궤를 빼앗김</p>
+  <div class="question">나는 하느님을 “도구”처럼 생각한 적은 없을까?</div>
+
+  <div class="memoWrap">
+    <label for="memo4">오늘 한 줄 메모</label>
+    <textarea id="memo4" placeholder="여기에 적으면 4장에 자동 저장돼" oninput="saveMemo(4)"></textarea>
+    <div class="status" id="status4">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day3">← 이전</a>
+    <a class="btn dark" href="#day5">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day5">
+  <div class="topline"><span>DAY 5</span><span>5/31</span></div>
+  <h1>사무엘상 5장</h1>
+  <p class="subtitle">블레셋과 다곤 신상</p>
+  <div class="question">하느님 없이도 잘 살 수 있다고 착각한 적 있나?</div>
+
+  <div class="memoWrap">
+    <label for="memo5">오늘 한 줄 메모</label>
+    <textarea id="memo5" placeholder="여기에 적으면 5장에 자동 저장돼" oninput="saveMemo(5)"></textarea>
+    <div class="status" id="status5">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day4">← 이전</a>
+    <a class="btn dark" href="#day6">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day6">
+  <div class="topline"><span>DAY 6</span><span>6/31</span></div>
+  <h1>사무엘상 6장</h1>
+  <p class="subtitle">계약 궤가 돌아옴</p>
+  <div class="question">나는 잘못을 깨달았을 때 제대로 돌이키는 편인가?</div>
+
+  <div class="memoWrap">
+    <label for="memo6">오늘 한 줄 메모</label>
+    <textarea id="memo6" placeholder="여기에 적으면 6장에 자동 저장돼" oninput="saveMemo(6)"></textarea>
+    <div class="status" id="status6">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day5">← 이전</a>
+    <a class="btn dark" href="#day7">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day7">
+  <div class="topline"><span>DAY 7</span><span>7/31</span></div>
+  <h1>사무엘상 7장</h1>
+  <p class="subtitle">미츠파 회개와 승리</p>
+  <div class="question">내가 진짜 의지하는 건 하느님일까, 다른 걸까?</div>
+
+  <div class="memoWrap">
+    <label for="memo7">오늘 한 줄 메모</label>
+    <textarea id="memo7" placeholder="여기에 적으면 7장에 자동 저장돼" oninput="saveMemo(7)"></textarea>
+    <div class="status" id="status7">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day6">← 이전</a>
+    <a class="btn dark" href="#day8">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day8">
+  <div class="topline"><span>DAY 8</span><span>8/31</span></div>
+  <h1>사무엘상 8장</h1>
+  <p class="subtitle">이스라엘이 왕을 요구함</p>
+  <div class="question">나는 다른 사람들 따라가고 싶은 마음이 강한 편인가?</div>
+
+  <div class="memoWrap">
+    <label for="memo8">오늘 한 줄 메모</label>
+    <textarea id="memo8" placeholder="여기에 적으면 8장에 자동 저장돼" oninput="saveMemo(8)"></textarea>
+    <div class="status" id="status8">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day7">← 이전</a>
+    <a class="btn dark" href="#day9">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day9">
+  <div class="topline"><span>DAY 9</span><span>9/31</span></div>
+  <h1>사무엘상 9장</h1>
+  <p class="subtitle">사울과 사무엘의 만남</p>
+  <div class="question">하느님은 내가 생각 못한 방식으로 일하신 적 있나?</div>
+
+  <div class="memoWrap">
+    <label for="memo9">오늘 한 줄 메모</label>
+    <textarea id="memo9" placeholder="여기에 적으면 9장에 자동 저장돼" oninput="saveMemo(9)"></textarea>
+    <div class="status" id="status9">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day8">← 이전</a>
+    <a class="btn dark" href="#day10">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day10">
+  <div class="topline"><span>DAY 10</span><span>10/31</span></div>
+  <h1>사무엘상 10장</h1>
+  <p class="subtitle">사울이 왕으로 뽑힘</p>
+  <div class="question">하느님이 나를 부르실 때 나는 자신감이 있는 편인가, 숨는 편인가?</div>
+
+  <div class="memoWrap">
+    <label for="memo10">오늘 한 줄 메모</label>
+    <textarea id="memo10" placeholder="여기에 적으면 10장에 자동 저장돼" oninput="saveMemo(10)"></textarea>
+    <div class="status" id="status10">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day9">← 이전</a>
+    <a class="btn dark" href="#day11">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day11">
+  <div class="topline"><span>DAY 11</span><span>11/31</span></div>
+  <h1>사무엘상 11장</h1>
+  <p class="subtitle">사울이 암몬을 물리침</p>
+  <div class="question">나는 도움이 필요한 사람을 보면 바로 움직이는 편인가?</div>
+
+  <div class="memoWrap">
+    <label for="memo11">오늘 한 줄 메모</label>
+    <textarea id="memo11" placeholder="여기에 적으면 11장에 자동 저장돼" oninput="saveMemo(11)"></textarea>
+    <div class="status" id="status11">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day10">← 이전</a>
+    <a class="btn dark" href="#day12">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day12">
+  <div class="topline"><span>DAY 12</span><span>12/31</span></div>
+  <h1>사무엘상 12장</h1>
+  <p class="subtitle">사무엘의 마지막 권고</p>
+  <div class="question">나는 내 선택에 대해 책임을 지고 있나?</div>
+
+  <div class="memoWrap">
+    <label for="memo12">오늘 한 줄 메모</label>
+    <textarea id="memo12" placeholder="여기에 적으면 12장에 자동 저장돼" oninput="saveMemo(12)"></textarea>
+    <div class="status" id="status12">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day11">← 이전</a>
+    <a class="btn dark" href="#day13">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day13">
+  <div class="topline"><span>DAY 13</span><span>13/31</span></div>
+  <h1>사무엘상 13장</h1>
+  <p class="subtitle">사울의 성급한 제사</p>
+  <div class="question">나는 조급해서 실수하는 편인가?</div>
+
+  <div class="memoWrap">
+    <label for="memo13">오늘 한 줄 메모</label>
+    <textarea id="memo13" placeholder="여기에 적으면 13장에 자동 저장돼" oninput="saveMemo(13)"></textarea>
+    <div class="status" id="status13">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day12">← 이전</a>
+    <a class="btn dark" href="#day14">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day14">
+  <div class="topline"><span>DAY 14</span><span>14/31</span></div>
+  <h1>사무엘상 14장</h1>
+  <p class="subtitle">요나탄의 용기</p>
+  <div class="question">믿음을 가지고 과감하게 행동해본 적이 있나?</div>
+
+  <div class="memoWrap">
+    <label for="memo14">오늘 한 줄 메모</label>
+    <textarea id="memo14" placeholder="여기에 적으면 14장에 자동 저장돼" oninput="saveMemo(14)"></textarea>
+    <div class="status" id="status14">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day13">← 이전</a>
+    <a class="btn dark" href="#day15">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day15">
+  <div class="topline"><span>DAY 15</span><span>15/31</span></div>
+  <h1>사무엘상 15장</h1>
+  <p class="subtitle">사울의 불순종</p>
+  <div class="question">나는 하느님 말씀을 “내 방식대로” 바꿔서 따르진 않나?</div>
+
+  <div class="memoWrap">
+    <label for="memo15">오늘 한 줄 메모</label>
+    <textarea id="memo15" placeholder="여기에 적으면 15장에 자동 저장돼" oninput="saveMemo(15)"></textarea>
+    <div class="status" id="status15">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day14">← 이전</a>
+    <a class="btn dark" href="#day16">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day16">
+  <div class="topline"><span>DAY 16</span><span>16/31</span></div>
+  <h1>사무엘상 16장</h1>
+  <p class="subtitle">다윗이 기름부음 받음</p>
+  <div class="question">나는 사람을 볼 때 겉모습보다 중심을 보려고 하나?</div>
+
+  <div class="memoWrap">
+    <label for="memo16">오늘 한 줄 메모</label>
+    <textarea id="memo16" placeholder="여기에 적으면 16장에 자동 저장돼" oninput="saveMemo(16)"></textarea>
+    <div class="status" id="status16">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day15">← 이전</a>
+    <a class="btn dark" href="#day17">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day17">
+  <div class="topline"><span>DAY 17</span><span>17/31</span></div>
+  <h1>사무엘상 17장</h1>
+  <p class="subtitle">다윗과 골리앗</p>
+  <div class="question">내 앞에 있는 ‘골리앗’은 뭐고, 나는 어떻게 반응하고 있지?</div>
+
+  <div class="memoWrap">
+    <label for="memo17">오늘 한 줄 메모</label>
+    <textarea id="memo17" placeholder="여기에 적으면 17장에 자동 저장돼" oninput="saveMemo(17)"></textarea>
+    <div class="status" id="status17">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day16">← 이전</a>
+    <a class="btn dark" href="#day18">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day18">
+  <div class="topline"><span>DAY 18</span><span>18/31</span></div>
+  <h1>사무엘상 18장</h1>
+  <p class="subtitle">다윗과 요나탄, 사울의 질투</p>
+  <div class="question">나는 다른 사람의 성공을 진심으로 기뻐할 수 있나?</div>
+
+  <div class="memoWrap">
+    <label for="memo18">오늘 한 줄 메모</label>
+    <textarea id="memo18" placeholder="여기에 적으면 18장에 자동 저장돼" oninput="saveMemo(18)"></textarea>
+    <div class="status" id="status18">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day17">← 이전</a>
+    <a class="btn dark" href="#day19">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day19">
+  <div class="topline"><span>DAY 19</span><span>19/31</span></div>
+  <h1>사무엘상 19장</h1>
+  <p class="subtitle">다윗이 사울에게서 도망침</p>
+  <div class="question">나는 옳은 일을 위해 위험을 감수한 적이 있나?</div>
+
+  <div class="memoWrap">
+    <label for="memo19">오늘 한 줄 메모</label>
+    <textarea id="memo19" placeholder="여기에 적으면 19장에 자동 저장돼" oninput="saveMemo(19)"></textarea>
+    <div class="status" id="status19">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day18">← 이전</a>
+    <a class="btn dark" href="#day20">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day20">
+  <div class="topline"><span>DAY 20</span><span>20/31</span></div>
+  <h1>사무엘상 20장</h1>
+  <p class="subtitle">다윗과 요나탄의 우정</p>
+  <div class="question">나는 진짜 친구를 위해 희생할 수 있나?</div>
+
+  <div class="memoWrap">
+    <label for="memo20">오늘 한 줄 메모</label>
+    <textarea id="memo20" placeholder="여기에 적으면 20장에 자동 저장돼" oninput="saveMemo(20)"></textarea>
+    <div class="status" id="status20">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day19">← 이전</a>
+    <a class="btn dark" href="#day21">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day21">
+  <div class="topline"><span>DAY 21</span><span>21/31</span></div>
+  <h1>사무엘상 21장</h1>
+  <p class="subtitle">다윗이 놉과 가드로 감</p>
+  <div class="question">나는 위기 상황에서 정직을 지키는 편인가?</div>
+
+  <div class="memoWrap">
+    <label for="memo21">오늘 한 줄 메모</label>
+    <textarea id="memo21" placeholder="여기에 적으면 21장에 자동 저장돼" oninput="saveMemo(21)"></textarea>
+    <div class="status" id="status21">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day20">← 이전</a>
+    <a class="btn dark" href="#day22">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day22">
+  <div class="topline"><span>DAY 22</span><span>22/31</span></div>
+  <h1>사무엘상 22장</h1>
+  <p class="subtitle">놉의 사제들이 죽임당함</p>
+  <div class="question">내 행동이 다른 사람에게 영향을 준다는 걸 알고 있나?</div>
+
+  <div class="memoWrap">
+    <label for="memo22">오늘 한 줄 메모</label>
+    <textarea id="memo22" placeholder="여기에 적으면 22장에 자동 저장돼" oninput="saveMemo(22)"></textarea>
+    <div class="status" id="status22">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day21">← 이전</a>
+    <a class="btn dark" href="#day23">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day23">
+  <div class="topline"><span>DAY 23</span><span>23/31</span></div>
+  <h1>사무엘상 23장</h1>
+  <p class="subtitle">다윗이 크일라를 구함</p>
+  <div class="question">나는 결정할 때 하느님께 먼저 물어보는 편인가?</div>
+
+  <div class="memoWrap">
+    <label for="memo23">오늘 한 줄 메모</label>
+    <textarea id="memo23" placeholder="여기에 적으면 23장에 자동 저장돼" oninput="saveMemo(23)"></textarea>
+    <div class="status" id="status23">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day22">← 이전</a>
+    <a class="btn dark" href="#day24">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day24">
+  <div class="topline"><span>DAY 24</span><span>24/31</span></div>
+  <h1>사무엘상 24장</h1>
+  <p class="subtitle">다윗이 사울을 살려줌</p>
+  <div class="question">나는 나를 괴롭히는 사람에게도 자비를 베풀 수 있나?</div>
+
+  <div class="memoWrap">
+    <label for="memo24">오늘 한 줄 메모</label>
+    <textarea id="memo24" placeholder="여기에 적으면 24장에 자동 저장돼" oninput="saveMemo(24)"></textarea>
+    <div class="status" id="status24">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day23">← 이전</a>
+    <a class="btn dark" href="#day25">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day25">
+  <div class="topline"><span>DAY 25</span><span>25/31</span></div>
+  <h1>사무엘상 25장</h1>
+  <p class="subtitle">나발과 아비가일</p>
+  <div class="question">나는 감정적으로 바로 반응하는 편인가, 한 번 멈추는 편인가?</div>
+
+  <div class="memoWrap">
+    <label for="memo25">오늘 한 줄 메모</label>
+    <textarea id="memo25" placeholder="여기에 적으면 25장에 자동 저장돼" oninput="saveMemo(25)"></textarea>
+    <div class="status" id="status25">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day24">← 이전</a>
+    <a class="btn dark" href="#day26">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day26">
+  <div class="topline"><span>DAY 26</span><span>26/31</span></div>
+  <h1>사무엘상 26장</h1>
+  <p class="subtitle">다윗이 또 사울을 살려줌</p>
+  <div class="question">같은 실수를 반복하지 않으려면 나는 어떻게 해야 할까?</div>
+
+  <div class="memoWrap">
+    <label for="memo26">오늘 한 줄 메모</label>
+    <textarea id="memo26" placeholder="여기에 적으면 26장에 자동 저장돼" oninput="saveMemo(26)"></textarea>
+    <div class="status" id="status26">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day25">← 이전</a>
+    <a class="btn dark" href="#day27">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day27">
+  <div class="topline"><span>DAY 27</span><span>27/31</span></div>
+  <h1>사무엘상 27장</h1>
+  <p class="subtitle">다윗이 블레셋 땅으로 감</p>
+  <div class="question">나는 두려움 때문에 잘못된 선택을 한 적 있나?</div>
+
+  <div class="memoWrap">
+    <label for="memo27">오늘 한 줄 메모</label>
+    <textarea id="memo27" placeholder="여기에 적으면 27장에 자동 저장돼" oninput="saveMemo(27)"></textarea>
+    <div class="status" id="status27">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day26">← 이전</a>
+    <a class="btn dark" href="#day28">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day28">
+  <div class="topline"><span>DAY 28</span><span>28/31</span></div>
+  <h1>사무엘상 28장</h1>
+  <p class="subtitle">사울과 엔도르의 무당</p>
+  <div class="question">나는 어려울 때 하느님이 아닌 다른 데 의지하려 한 적 있나?</div>
+
+  <div class="memoWrap">
+    <label for="memo28">오늘 한 줄 메모</label>
+    <textarea id="memo28" placeholder="여기에 적으면 28장에 자동 저장돼" oninput="saveMemo(28)"></textarea>
+    <div class="status" id="status28">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day27">← 이전</a>
+    <a class="btn dark" href="#day29">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day29">
+  <div class="topline"><span>DAY 29</span><span>29/31</span></div>
+  <h1>사무엘상 29장</h1>
+  <p class="subtitle">다윗이 전쟁에서 제외됨</p>
+  <div class="question">하느님이 내 계획을 막으신 적이 있다면, 그게 오히려 도움이었을까?</div>
+
+  <div class="memoWrap">
+    <label for="memo29">오늘 한 줄 메모</label>
+    <textarea id="memo29" placeholder="여기에 적으면 29장에 자동 저장돼" oninput="saveMemo(29)"></textarea>
+    <div class="status" id="status29">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day28">← 이전</a>
+    <a class="btn dark" href="#day30">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day30">
+  <div class="topline"><span>DAY 30</span><span>30/31</span></div>
+  <h1>사무엘상 30장</h1>
+  <p class="subtitle">다윗이 치클락을 되찾음</p>
+  <div class="question">나는 힘들 때 낙심하기보다 다시 일어나는 편인가?</div>
+
+  <div class="memoWrap">
+    <label for="memo30">오늘 한 줄 메모</label>
+    <textarea id="memo30" placeholder="여기에 적으면 30장에 자동 저장돼" oninput="saveMemo(30)"></textarea>
+    <div class="status" id="status30">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day29">← 이전</a>
+    <a class="btn dark" href="#day31">다음 →</a>
+  </div>
+</section>
+
+<section class="card" id="day31">
+  <div class="topline"><span>DAY 31</span><span>31/31</span></div>
+  <h1>사무엘상 31장</h1>
+  <p class="subtitle">사울의 죽음</p>
+  <div class="question">내 삶의 마지막을 돌아본다면, 나는 어떤 선택들을 했을까?</div>
+
+  <div class="memoWrap">
+    <label for="memo31">오늘 한 줄 메모</label>
+    <textarea id="memo31" placeholder="여기에 적으면 31장에 자동 저장돼" oninput="saveMemo(31)"></textarea>
+    <div class="status" id="status31">자동 저장 준비됨</div>
+  </div>
+
+  <div class="buttons">
+    <a class="btn light" href="#day30">← 이전</a>
+    <a class="btn dark" href="#day1">다음 →</a>
+  </div>
+</section>
+
+
+<nav class="jump"><a href="#day1">1</a><a href="#day2">2</a><a href="#day3">3</a><a href="#day4">4</a><a href="#day5">5</a><a href="#day6">6</a><a href="#day7">7</a><a href="#day8">8</a><a href="#day9">9</a><a href="#day10">10</a><a href="#day11">11</a><a href="#day12">12</a><a href="#day13">13</a><a href="#day14">14</a><a href="#day15">15</a><a href="#day16">16</a><a href="#day17">17</a><a href="#day18">18</a><a href="#day19">19</a><a href="#day20">20</a><a href="#day21">21</a><a href="#day22">22</a><a href="#day23">23</a><a href="#day24">24</a><a href="#day25">25</a><a href="#day26">26</a><a href="#day27">27</a><a href="#day28">28</a><a href="#day29">29</a><a href="#day30">30</a><a href="#day31">31</a></nav>
+<p class="tip">메모는 각 장마다 따로 저장돼. 파일을 같은 브라우저/앱에서 열면 다시 불러와져 👍</p>
+</div>
+
+<script>
+function saveMemo(day){
+  var box = document.getElementById("memo" + day);
+  var status = document.getElementById("status" + day);
+  if(box){
+    localStorage.setItem("samuel_memo_" + day, box.value);
+    if(status) status.textContent = "자동 저장됨 👍";
+  }
+}
+
+function loadMemos(){
+  for(var i=1; i<=31; i++){
+    var box = document.getElementById("memo" + i);
+    if(box){
+      box.value = localStorage.getItem("samuel_memo_" + i) || "";
+    }
+  }
+}
+
+loadMemos();
+</script>
+</body>
+</html>
