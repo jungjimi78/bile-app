@@ -1,0 +1,2922 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>가족 성경 묵상 앱</title>
+<style>
+:root {
+  --bg:#f2f2f7;
+  --card:#ffffff;
+  --text:#111111;
+  --muted:#7a7a82;
+  --line:#e6e6eb;
+  --blue:#007aff;
+  --red:#ff3b30;
+  --green:#34c759;
+  --shadow:0 18px 45px rgba(0,0,0,.08);
+}
+* { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body {
+  margin:0;
+  min-height:100%;
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Apple SD Gothic Neo","Noto Sans KR",Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+body {
+  padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+}
+.app {
+  width:min(720px,100%);
+  margin:0 auto;
+}
+.app-header {
+  position:sticky;
+  top:0;
+  z-index:10;
+  background:rgba(242,242,247,.88);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  padding:18px 18px 12px;
+  border-bottom:1px solid rgba(0,0,0,.04);
+}
+.app-title {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.app-title .icon {
+  width:42px;height:42px;border-radius:14px;background:#fff;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+  font-size:24px;
+}
+.app-title h1 {
+  margin:0;
+  font-size:28px;
+  letter-spacing:-.8px;
+  line-height:1.05;
+}
+.subtitle {
+  margin:8px 0 0 52px;
+  color:var(--muted);
+  font-size:14px;
+}
+.screen {
+  padding:16px 16px 32px;
+}
+#home { display:block; }
+.reader { display:none; }
+.reader:target { display:block; }
+body:has(.reader:target) #home { display:none; }
+
+.book-list {
+  display:grid;
+  gap:14px;
+}
+.book-card {
+  text-decoration:none;
+  color:var(--text);
+  background:var(--card);
+  border-radius:26px;
+  padding:18px;
+  box-shadow:var(--shadow);
+  display:flex;
+  align-items:center;
+  gap:14px;
+  border:1px solid rgba(255,255,255,.75);
+}
+.book-card:active { transform:scale(.985); }
+.book-icon {
+  width:58px;height:58px;border-radius:20px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:30px;
+  flex:0 0 58px;
+}
+.book-card.warm .book-icon { background:linear-gradient(135deg,#fff0cf,#ffd18a); }
+.book-card.purple .book-icon { background:linear-gradient(135deg,#eee8ff,#cfc2ff); }
+.book-info { flex:1; }
+.book-title { font-size:22px;font-weight:800;letter-spacing:-.4px; }
+.book-desc { color:var(--muted);font-size:14px;margin-top:4px;line-height:1.35; }
+.book-meta { color:#8b74bd;font-size:13px;font-weight:800;margin-top:8px; }
+.chevron { font-size:34px;color:#c7c7cc;line-height:1; }
+
+.card {
+  background:transparent;
+  padding:0 16px 32px;
+}
+.reader-top {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin:12px 0 12px;
+}
+.back {
+  text-decoration:none;
+  color:var(--blue);
+  font-size:17px;
+  font-weight:700;
+}
+.badge {
+  font-size:14px;
+  font-weight:800;
+  color:var(--muted);
+  background:rgba(255,255,255,.8);
+  border-radius:999px;
+  padding:8px 12px;
+}
+.date-pill {
+  background:#fff;
+  color:var(--muted);
+  box-shadow:0 8px 24px rgba(0,0,0,.05);
+  border-radius:999px;
+  padding:10px 14px;
+  width:max-content;
+  margin:0 auto 14px;
+  font-weight:700;
+  font-size:14px;
+}
+.chapter-head {
+  background:var(--card);
+  border-radius:30px;
+  padding:24px 20px;
+  box-shadow:var(--shadow);
+  text-align:center;
+  margin-bottom:14px;
+}
+.day {
+  color:#8b74bd;
+  font-weight:900;
+  font-size:13px;
+  letter-spacing:.4px;
+}
+.chapter-head h1 {
+  margin:12px 0 6px;
+  font-size:36px;
+  letter-spacing:-1.4px;
+  line-height:1.05;
+}
+.chapter-head p {
+  margin:0;
+  color:var(--muted);
+  font-size:15px;
+  font-weight:650;
+  line-height:1.35;
+}
+.question-card {
+  border-radius:30px;
+  padding:20px;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.reader.warm .question-card { background:linear-gradient(135deg,#fff5df,#fff); }
+.reader.purple .question-card { background:linear-gradient(135deg,#f0ecff,#fff); }
+.q-label {
+  font-size:13px;
+  color:var(--muted);
+  font-weight:900;
+  margin-bottom:10px;
+}
+.question {
+  font-size:23px;
+  line-height:1.45;
+  font-weight:850;
+  letter-spacing:-.35px;
+  word-break:keep-all;
+}
+.field {
+  background:var(--card);
+  border-radius:26px;
+  padding:16px;
+  margin:14px 0;
+  box-shadow:0 10px 30px rgba(0,0,0,.055);
+}
+label {
+  display:block;
+  font-size:15px;
+  font-weight:850;
+  margin-bottom:10px;
+}
+textarea {
+  width:100%;
+  min-height:112px;
+  resize:vertical;
+  border:0;
+  outline:0;
+  background:#f2f2f7;
+  border-radius:18px;
+  padding:14px;
+  font-size:17px;
+  line-height:1.45;
+  font-family:inherit;
+}
+.status {
+  color:var(--muted);
+  min-height:22px;
+  font-size:13px;
+  margin:8px 2px 0;
+}
+.nav-row {
+  display:flex;
+  gap:12px;
+  margin:18px 0;
+}
+.nav-btn {
+  flex:1;
+  text-align:center;
+  text-decoration:none;
+  border-radius:18px;
+  padding:15px 12px;
+  font-size:17px;
+  font-weight:850;
+}
+.nav-btn.primary { background:#111;color:white; }
+.nav-btn.secondary { background:#fff;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.05); }
+.jump-wrap {
+  background:var(--card);
+  border-radius:26px;
+  padding:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.055);
+  margin-bottom:14px;
+}
+.mini-title {
+  font-size:14px;
+  color:var(--muted);
+  font-weight:900;
+  margin-bottom:12px;
+}
+.jump {
+  display:grid;
+  grid-template-columns:repeat(8,1fr);
+  gap:8px;
+}
+.jump a {
+  text-decoration:none;
+  text-align:center;
+  padding:10px 0;
+  border-radius:13px;
+  background:#f2f2f7;
+  color:#333;
+  font-weight:850;
+  font-size:13px;
+}
+.jump a. {
+  background:#ffe8e6;
+  color:#a30000;
+  box-shadow:inset 0 0 0 1.5px #ff8a84;
+}
+.jump a.today-done {
+  background:#e9f9ed;
+  color:#166a2f;
+  box-shadow:inset 0 0 0 1.5px #79d68c;
+}
+.history {
+  background:var(--card);
+  border-radius:26px;
+  padding:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.055);
+}
+.history-title {
+  font-size:16px;
+  font-weight:900;
+  margin-bottom:10px;
+}
+.historyItem {
+  background:#f2f2f7;
+  border-radius:18px;
+  padding:13px;
+  margin:10px 0;
+  font-size:14px;
+  line-height:1.45;
+}
+.historyDate {
+  color:#8b74bd;
+  font-weight:900;
+  margin-bottom:6px;
+}
+.historyEmpty {
+  color:var(--muted);
+  font-size:14px;
+}
+.home-tip {
+  margin:16px 4px 0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+  text-align:center;
+}
+@supports not selector(:has(*)) {
+  #home { display:block;margin-bottom:20px; }
+  .reader { display:block;margin-bottom:30px; }
+}
+@media (max-width:390px) {
+  .app-title h1 { font-size:25px; }
+  .subtitle { margin-left:52px; }
+  .chapter-head h1 { font-size:32px; }
+  .question { font-size:21px; }
+  .jump { grid-template-columns:repeat(6,1fr); }
+}
+</style>
+
+<link rel="apple-touch-icon" sizes="180x180" href="https://jungjimi78.github.io/bile-app/apple-touch-icon.png?v=99">
+<link rel="apple-touch-icon" sizes="167x167" href="https://jungjimi78.github.io/bile-app/apple-touch-icon.png?v=99">
+<link rel="apple-touch-icon" sizes="152x152" href="https://jungjimi78.github.io/bile-app/apple-touch-icon.png?v=99">
+<link rel="icon" type="image/png" href="https://jungjimi78.github.io/bile-app/apple-touch-icon.png?v=99">
+<meta name="apple-mobile-web-app-title" content="성경 묵상">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#f2f2f7">
+
+</head>
+<body>
+<div class="app">
+  <header class="app-header">
+    <div class="app-title">
+      <div class="icon">📖</div>
+      <h1>가족 성경 묵상</h1>
+    </div>
+    <p class="subtitle">책을 고르고, 하루 한 장씩 기록하기</p>
+  </header>
+
+  <main id="home" class="screen">
+    <div class="book-list">
+      
+<a class="book-card warm" href="#samuel1-1">
+  <div class="book-icon">👑</div>
+  <div class="book-info">
+    <div class="book-title">사무엘상</div>
+    <div class="book-desc">다윗 이야기의 시작, 선택과 믿음의 흐름</div>
+    <div class="book-meta">31장 · 눌러서 시작</div>
+  </div>
+  <div class="chevron">›</div>
+</a>
+<a class="book-card purple" href="#revelation-1">
+  <div class="book-icon">🌌</div>
+  <div class="book-info">
+    <div class="book-title">요한 묵시록</div>
+    <div class="book-desc">고난 속 희망, 심판과 새 창조의 묵상</div>
+    <div class="book-meta">22장 · 눌러서 시작</div>
+  </div>
+  <div class="chevron">›</div>
+</a>
+    </div>
+    <p class="home-tip">초록색은 오늘 기록한 장, 빨간색은 오늘 아직 기록하지 않은 장이야.</p>
+  </main>
+
+  
+<section class="reader card warm" id="samuel1-1">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 1 · 1/31</div>
+    <h1>사무엘상 1장</h1>
+    <p>한나의 기도와 사무엘의 탄생</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 힘들 때 하느님께 솔직하게 말하는 편인가?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-1">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-1" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 1)"></textarea>
+    <div class="status" id="verse-status-samuel1-1">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-1">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-1" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 1)"></textarea>
+    <div class="status" id="status-samuel1-1">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-31">이전</a>
+    <a class="nav-btn primary" href="#samuel1-2">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-2">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 2 · 2/31</div>
+    <h1>사무엘상 2장</h1>
+    <p>한나의 찬가와 엘리 집안</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">하느님은 어떤 사람을 높이시고 어떤 사람을 낮추실까?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-2">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-2" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 2)"></textarea>
+    <div class="status" id="verse-status-samuel1-2">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-2">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-2" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 2)"></textarea>
+    <div class="status" id="status-samuel1-2">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-1">이전</a>
+    <a class="nav-btn primary" href="#samuel1-3">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-3">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 3 · 3/31</div>
+    <h1>사무엘상 3장</h1>
+    <p>사무엘이 부르심을 받음</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 하느님의 부르심을 들으려고 노력하고 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-3">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-3" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 3)"></textarea>
+    <div class="status" id="verse-status-samuel1-3">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-3">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-3" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 3)"></textarea>
+    <div class="status" id="status-samuel1-3">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-2">이전</a>
+    <a class="nav-btn primary" href="#samuel1-4">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-4">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 4 · 4/31</div>
+    <h1>사무엘상 4장</h1>
+    <p>계약 궤를 빼앗김</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 하느님을 “도구”처럼 생각한 적은 없을까?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-4">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-4" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 4)"></textarea>
+    <div class="status" id="verse-status-samuel1-4">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-4">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-4" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 4)"></textarea>
+    <div class="status" id="status-samuel1-4">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-3">이전</a>
+    <a class="nav-btn primary" href="#samuel1-5">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-5">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 5 · 5/31</div>
+    <h1>사무엘상 5장</h1>
+    <p>블레셋과 다곤 신상</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">하느님 없이도 잘 살 수 있다고 착각한 적 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-5">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-5" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 5)"></textarea>
+    <div class="status" id="verse-status-samuel1-5">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-5">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-5" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 5)"></textarea>
+    <div class="status" id="status-samuel1-5">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-4">이전</a>
+    <a class="nav-btn primary" href="#samuel1-6">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-6">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 6 · 6/31</div>
+    <h1>사무엘상 6장</h1>
+    <p>계약 궤가 돌아옴</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 잘못을 깨달았을 때 제대로 돌이키는 편인가?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-6">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-6" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 6)"></textarea>
+    <div class="status" id="verse-status-samuel1-6">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-6">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-6" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 6)"></textarea>
+    <div class="status" id="status-samuel1-6">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-5">이전</a>
+    <a class="nav-btn primary" href="#samuel1-7">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-7">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 7 · 7/31</div>
+    <h1>사무엘상 7장</h1>
+    <p>미츠파 회개와 승리</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">내가 진짜 의지하는 건 하느님일까, 다른 걸까?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-7">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-7" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 7)"></textarea>
+    <div class="status" id="verse-status-samuel1-7">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-7">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-7" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 7)"></textarea>
+    <div class="status" id="status-samuel1-7">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-6">이전</a>
+    <a class="nav-btn primary" href="#samuel1-8">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-8">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 8 · 8/31</div>
+    <h1>사무엘상 8장</h1>
+    <p>이스라엘이 왕을 요구함</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 다른 사람들 따라가고 싶은 마음이 강한 편인가?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-8">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-8" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 8)"></textarea>
+    <div class="status" id="verse-status-samuel1-8">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-8">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-8" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 8)"></textarea>
+    <div class="status" id="status-samuel1-8">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-7">이전</a>
+    <a class="nav-btn primary" href="#samuel1-9">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-9">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 9 · 9/31</div>
+    <h1>사무엘상 9장</h1>
+    <p>사울과 사무엘의 만남</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">하느님은 내가 생각 못한 방식으로 일하신 적 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-9">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-9" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 9)"></textarea>
+    <div class="status" id="verse-status-samuel1-9">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-9">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-9" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 9)"></textarea>
+    <div class="status" id="status-samuel1-9">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-8">이전</a>
+    <a class="nav-btn primary" href="#samuel1-10">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-10">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 10 · 10/31</div>
+    <h1>사무엘상 10장</h1>
+    <p>사울이 왕으로 뽑힘</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">하느님이 나를 부르실 때 나는 자신감이 있는 편인가, 숨는 편인가?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-10">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-10" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 10)"></textarea>
+    <div class="status" id="verse-status-samuel1-10">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-10">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-10" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 10)"></textarea>
+    <div class="status" id="status-samuel1-10">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-9">이전</a>
+    <a class="nav-btn primary" href="#samuel1-11">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-11">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 11 · 11/31</div>
+    <h1>사무엘상 11장</h1>
+    <p>사울이 암몬을 물리침</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 도움이 필요한 사람을 보면 바로 움직이는 편인가?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-11">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-11" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 11)"></textarea>
+    <div class="status" id="verse-status-samuel1-11">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-11">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-11" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 11)"></textarea>
+    <div class="status" id="status-samuel1-11">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-10">이전</a>
+    <a class="nav-btn primary" href="#samuel1-12">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-12">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 12 · 12/31</div>
+    <h1>사무엘상 12장</h1>
+    <p>사무엘의 마지막 권고</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 내 선택에 대해 책임을 지고 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-12">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-12" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 12)"></textarea>
+    <div class="status" id="verse-status-samuel1-12">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-12">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-12" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 12)"></textarea>
+    <div class="status" id="status-samuel1-12">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-11">이전</a>
+    <a class="nav-btn primary" href="#samuel1-13">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-13">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 13 · 13/31</div>
+    <h1>사무엘상 13장</h1>
+    <p>사울의 성급한 제사</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 조급해서 실수하는 편인가?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-13">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-13" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 13)"></textarea>
+    <div class="status" id="verse-status-samuel1-13">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-13">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-13" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 13)"></textarea>
+    <div class="status" id="status-samuel1-13">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-12">이전</a>
+    <a class="nav-btn primary" href="#samuel1-14">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-14">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 14 · 14/31</div>
+    <h1>사무엘상 14장</h1>
+    <p>요나탄의 용기</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">믿음을 가지고 과감하게 행동해본 적이 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-14">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-14" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 14)"></textarea>
+    <div class="status" id="verse-status-samuel1-14">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-14">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-14" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 14)"></textarea>
+    <div class="status" id="status-samuel1-14">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-13">이전</a>
+    <a class="nav-btn primary" href="#samuel1-15">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-15">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 15 · 15/31</div>
+    <h1>사무엘상 15장</h1>
+    <p>사울의 불순종</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 하느님 말씀을 “내 방식대로” 바꿔서 따르진 않나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-15">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-15" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 15)"></textarea>
+    <div class="status" id="verse-status-samuel1-15">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-15">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-15" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 15)"></textarea>
+    <div class="status" id="status-samuel1-15">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-14">이전</a>
+    <a class="nav-btn primary" href="#samuel1-16">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-16">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 16 · 16/31</div>
+    <h1>사무엘상 16장</h1>
+    <p>다윗이 기름부음 받음</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 사람을 볼 때 겉모습보다 중심을 보려고 하나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-16">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-16" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 16)"></textarea>
+    <div class="status" id="verse-status-samuel1-16">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-16">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-16" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 16)"></textarea>
+    <div class="status" id="status-samuel1-16">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-15">이전</a>
+    <a class="nav-btn primary" href="#samuel1-17">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-17">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 17 · 17/31</div>
+    <h1>사무엘상 17장</h1>
+    <p>다윗과 골리앗</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">내 앞에 있는 ‘골리앗’은 뭐고, 나는 어떻게 반응하고 있지?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-17">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-17" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 17)"></textarea>
+    <div class="status" id="verse-status-samuel1-17">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-17">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-17" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 17)"></textarea>
+    <div class="status" id="status-samuel1-17">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-16">이전</a>
+    <a class="nav-btn primary" href="#samuel1-18">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-18">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 18 · 18/31</div>
+    <h1>사무엘상 18장</h1>
+    <p>다윗과 요나탄, 사울의 질투</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 다른 사람의 성공을 진심으로 기뻐할 수 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-18">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-18" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 18)"></textarea>
+    <div class="status" id="verse-status-samuel1-18">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-18">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-18" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 18)"></textarea>
+    <div class="status" id="status-samuel1-18">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-17">이전</a>
+    <a class="nav-btn primary" href="#samuel1-19">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-19">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 19 · 19/31</div>
+    <h1>사무엘상 19장</h1>
+    <p>다윗이 사울에게서 도망침</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 옳은 일을 위해 위험을 감수한 적이 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-19">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-19" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 19)"></textarea>
+    <div class="status" id="verse-status-samuel1-19">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-19">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-19" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 19)"></textarea>
+    <div class="status" id="status-samuel1-19">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-18">이전</a>
+    <a class="nav-btn primary" href="#samuel1-20">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-20">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 20 · 20/31</div>
+    <h1>사무엘상 20장</h1>
+    <p>다윗과 요나탄의 우정</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 진짜 친구를 위해 희생할 수 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-20">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-20" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 20)"></textarea>
+    <div class="status" id="verse-status-samuel1-20">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-20">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-20" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 20)"></textarea>
+    <div class="status" id="status-samuel1-20">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-19">이전</a>
+    <a class="nav-btn primary" href="#samuel1-21">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-21">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 21 · 21/31</div>
+    <h1>사무엘상 21장</h1>
+    <p>다윗이 놉과 가드로 감</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 위기 상황에서 정직을 지키는 편인가?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-21">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-21" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 21)"></textarea>
+    <div class="status" id="verse-status-samuel1-21">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-21">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-21" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 21)"></textarea>
+    <div class="status" id="status-samuel1-21">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-20">이전</a>
+    <a class="nav-btn primary" href="#samuel1-22">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-22">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 22 · 22/31</div>
+    <h1>사무엘상 22장</h1>
+    <p>놉의 사제들이 죽임당함</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">내 행동이 다른 사람에게 영향을 준다는 걸 알고 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-22">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-22" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 22)"></textarea>
+    <div class="status" id="verse-status-samuel1-22">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-22">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-22" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 22)"></textarea>
+    <div class="status" id="status-samuel1-22">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-21">이전</a>
+    <a class="nav-btn primary" href="#samuel1-23">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-23">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 23 · 23/31</div>
+    <h1>사무엘상 23장</h1>
+    <p>다윗이 크일라를 구함</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 결정할 때 하느님께 먼저 물어보는 편인가?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-23">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-23" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 23)"></textarea>
+    <div class="status" id="verse-status-samuel1-23">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-23">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-23" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 23)"></textarea>
+    <div class="status" id="status-samuel1-23">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-22">이전</a>
+    <a class="nav-btn primary" href="#samuel1-24">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-24">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 24 · 24/31</div>
+    <h1>사무엘상 24장</h1>
+    <p>다윗이 사울을 살려줌</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 나를 괴롭히는 사람에게도 자비를 베풀 수 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-24">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-24" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 24)"></textarea>
+    <div class="status" id="verse-status-samuel1-24">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-24">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-24" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 24)"></textarea>
+    <div class="status" id="status-samuel1-24">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-23">이전</a>
+    <a class="nav-btn primary" href="#samuel1-25">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-25">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 25 · 25/31</div>
+    <h1>사무엘상 25장</h1>
+    <p>나발과 아비가일</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 감정적으로 바로 반응하는 편인가, 한 번 멈추는 편인가?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-25">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-25" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 25)"></textarea>
+    <div class="status" id="verse-status-samuel1-25">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-25">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-25" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 25)"></textarea>
+    <div class="status" id="status-samuel1-25">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-24">이전</a>
+    <a class="nav-btn primary" href="#samuel1-26">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-26">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 26 · 26/31</div>
+    <h1>사무엘상 26장</h1>
+    <p>다윗이 또 사울을 살려줌</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">같은 실수를 반복하지 않으려면 나는 어떻게 해야 할까?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-26">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-26" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 26)"></textarea>
+    <div class="status" id="verse-status-samuel1-26">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-26">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-26" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 26)"></textarea>
+    <div class="status" id="status-samuel1-26">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-25">이전</a>
+    <a class="nav-btn primary" href="#samuel1-27">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-27">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 27 · 27/31</div>
+    <h1>사무엘상 27장</h1>
+    <p>다윗이 블레셋 땅으로 감</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 두려움 때문에 잘못된 선택을 한 적 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-27">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-27" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 27)"></textarea>
+    <div class="status" id="verse-status-samuel1-27">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-27">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-27" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 27)"></textarea>
+    <div class="status" id="status-samuel1-27">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-26">이전</a>
+    <a class="nav-btn primary" href="#samuel1-28">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-28">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 28 · 28/31</div>
+    <h1>사무엘상 28장</h1>
+    <p>사울과 엔도르의 무당</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 어려울 때 하느님이 아닌 다른 데 의지하려 한 적 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-28">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-28" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 28)"></textarea>
+    <div class="status" id="verse-status-samuel1-28">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-28">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-28" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 28)"></textarea>
+    <div class="status" id="status-samuel1-28">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-27">이전</a>
+    <a class="nav-btn primary" href="#samuel1-29">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-29">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 29 · 29/31</div>
+    <h1>사무엘상 29장</h1>
+    <p>다윗이 전쟁에서 제외됨</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">하느님이 내 계획을 막으신 적이 있다면, 그게 오히려 도움이었을까?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-29">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-29" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 29)"></textarea>
+    <div class="status" id="verse-status-samuel1-29">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-29">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-29" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 29)"></textarea>
+    <div class="status" id="status-samuel1-29">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-28">이전</a>
+    <a class="nav-btn primary" href="#samuel1-30">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-30">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 30 · 30/31</div>
+    <h1>사무엘상 30장</h1>
+    <p>다윗이 치클락을 되찾음</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 힘들 때 낙심하기보다 다시 일어나는 편인가?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-30">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-30" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 30)"></textarea>
+    <div class="status" id="verse-status-samuel1-30">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-30">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-30" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 30)"></textarea>
+    <div class="status" id="status-samuel1-30">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-29">이전</a>
+    <a class="nav-btn primary" href="#samuel1-31">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card warm" id="samuel1-31">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">👑 사무엘상</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 31 · 31/31</div>
+    <h1>사무엘상 31장</h1>
+    <p>사울의 죽음</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">내 삶의 마지막을 돌아본다면, 나는 어떤 선택들을 했을까?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-samuel1-31">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-samuel1-31" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('samuel1', 31)"></textarea>
+    <div class="status" id="verse-status-samuel1-31">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-samuel1-31">오늘 묵상 메모</label>
+    <textarea id="memo-samuel1-31" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('samuel1', 31)"></textarea>
+    <div class="status" id="status-samuel1-31">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#samuel1-30">이전</a>
+    <a class="nav-btn primary" href="#samuel1-1">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#samuel1-1" data-book="samuel1" data-chapter="1">1</a><a href="#samuel1-2" data-book="samuel1" data-chapter="2">2</a><a href="#samuel1-3" data-book="samuel1" data-chapter="3">3</a><a href="#samuel1-4" data-book="samuel1" data-chapter="4">4</a><a href="#samuel1-5" data-book="samuel1" data-chapter="5">5</a><a href="#samuel1-6" data-book="samuel1" data-chapter="6">6</a><a href="#samuel1-7" data-book="samuel1" data-chapter="7">7</a><a href="#samuel1-8" data-book="samuel1" data-chapter="8">8</a><a href="#samuel1-9" data-book="samuel1" data-chapter="9">9</a><a href="#samuel1-10" data-book="samuel1" data-chapter="10">10</a><a href="#samuel1-11" data-book="samuel1" data-chapter="11">11</a><a href="#samuel1-12" data-book="samuel1" data-chapter="12">12</a><a href="#samuel1-13" data-book="samuel1" data-chapter="13">13</a><a href="#samuel1-14" data-book="samuel1" data-chapter="14">14</a><a href="#samuel1-15" data-book="samuel1" data-chapter="15">15</a><a href="#samuel1-16" data-book="samuel1" data-chapter="16">16</a><a href="#samuel1-17" data-book="samuel1" data-chapter="17">17</a><a href="#samuel1-18" data-book="samuel1" data-chapter="18">18</a><a href="#samuel1-19" data-book="samuel1" data-chapter="19">19</a><a href="#samuel1-20" data-book="samuel1" data-chapter="20">20</a><a href="#samuel1-21" data-book="samuel1" data-chapter="21">21</a><a href="#samuel1-22" data-book="samuel1" data-chapter="22">22</a><a href="#samuel1-23" data-book="samuel1" data-chapter="23">23</a><a href="#samuel1-24" data-book="samuel1" data-chapter="24">24</a><a href="#samuel1-25" data-book="samuel1" data-chapter="25">25</a><a href="#samuel1-26" data-book="samuel1" data-chapter="26">26</a><a href="#samuel1-27" data-book="samuel1" data-chapter="27">27</a><a href="#samuel1-28" data-book="samuel1" data-chapter="28">28</a><a href="#samuel1-29" data-book="samuel1" data-chapter="29">29</a><a href="#samuel1-30" data-book="samuel1" data-chapter="30">30</a><a href="#samuel1-31" data-book="samuel1" data-chapter="31">31</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-1">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 1 · 1/22</div>
+    <h1>요한 묵시록 1장</h1>
+    <p>그리스도의 현현과 교회에 보내는 말씀의 시작</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 예수님을 실제로 만난다면 기쁠까, 두려울까? 왜?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-1">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-1" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 1)"></textarea>
+    <div class="status" id="verse-status-revelation-1">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-1">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-1" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 1)"></textarea>
+    <div class="status" id="status-revelation-1">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-22">이전</a>
+    <a class="nav-btn primary" href="#revelation-2">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-2">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 2 · 2/22</div>
+    <h1>요한 묵시록 2장</h1>
+    <p>일곱 교회에 대한 칭찬과 책망</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 신앙을 시작했을 때의 나와 지금의 내가 어떻게 달라졌다고 느끼나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-2">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-2" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 2)"></textarea>
+    <div class="status" id="verse-status-revelation-2">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-2">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-2" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 2)"></textarea>
+    <div class="status" id="status-revelation-2">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-1">이전</a>
+    <a class="nav-btn primary" href="#revelation-3">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-3">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 3 · 3/22</div>
+    <h1>요한 묵시록 3장</h1>
+    <p>사르디스, 필라델피아, 라오디케이아 교회</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 신앙을 “적당히” 유지하고 있진 않나? 그게 왜 편할까?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-3">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-3" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 3)"></textarea>
+    <div class="status" id="verse-status-revelation-3">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-3">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-3" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 3)"></textarea>
+    <div class="status" id="status-revelation-3">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-2">이전</a>
+    <a class="nav-btn primary" href="#revelation-4">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-4">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 4 · 4/22</div>
+    <h1>요한 묵시록 4장</h1>
+    <p>하늘 어좌와 하느님의 거룩함</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 하느님이 중심인 삶을 살고 있나, 내가 중심인가?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-4">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-4" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 4)"></textarea>
+    <div class="status" id="verse-status-revelation-4">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-4">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-4" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 4)"></textarea>
+    <div class="status" id="status-revelation-4">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-3">이전</a>
+    <a class="nav-btn primary" href="#revelation-5">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-5">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 5 · 5/22</div>
+    <h1>요한 묵시록 5장</h1>
+    <p>봉인된 두루마리와 어린양</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 진짜로 예수님이 내 삶의 “주인”이라고 생각하나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-5">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-5" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 5)"></textarea>
+    <div class="status" id="verse-status-revelation-5">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-5">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-5" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 5)"></textarea>
+    <div class="status" id="status-revelation-5">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-4">이전</a>
+    <a class="nav-btn primary" href="#revelation-6">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-6">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 6 · 6/22</div>
+    <h1>요한 묵시록 6장</h1>
+    <p>일곱 봉인의 시작과 세상의 혼란</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">세상의 고통을 볼 때 나는 하느님을 더 찾게 되나, 멀어지게 되나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-6">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-6" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 6)"></textarea>
+    <div class="status" id="verse-status-revelation-6">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-6">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-6" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 6)"></textarea>
+    <div class="status" id="status-revelation-6">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-5">이전</a>
+    <a class="nav-btn primary" href="#revelation-7">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-7">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 7 · 7/22</div>
+    <h1>요한 묵시록 7장</h1>
+    <p>인장을 받은 이들과 큰 무리</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 하느님께 속해 있다는 확신이 흔들린 적이 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-7">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-7" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 7)"></textarea>
+    <div class="status" id="verse-status-revelation-7">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-7">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-7" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 7)"></textarea>
+    <div class="status" id="status-revelation-7">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-6">이전</a>
+    <a class="nav-btn primary" href="#revelation-8">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-8">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 8 · 8/22</div>
+    <h1>요한 묵시록 8장</h1>
+    <p>성도들의 기도와 나팔 재앙의 시작</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 기도를 습관처럼 하나, 아니면 진짜 대화라고 느끼나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-8">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-8" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 8)"></textarea>
+    <div class="status" id="verse-status-revelation-8">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-8">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-8" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 8)"></textarea>
+    <div class="status" id="status-revelation-8">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-7">이전</a>
+    <a class="nav-btn primary" href="#revelation-9">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-9">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 9 · 9/22</div>
+    <h1>요한 묵시록 9장</h1>
+    <p>재앙 속에서도 회개하지 않는 사람들</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 반복적으로 빠지는 죄가 있다면 그걸 진지하게 싸우고 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-9">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-9" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 9)"></textarea>
+    <div class="status" id="verse-status-revelation-9">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-9">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-9" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 9)"></textarea>
+    <div class="status" id="status-revelation-9">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-8">이전</a>
+    <a class="nav-btn primary" href="#revelation-10">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-10">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 10 · 10/22</div>
+    <h1>요한 묵시록 10장</h1>
+    <p>작은 두루마리, 달지만 쓴 말씀</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">하느님의 말씀이 내 삶에서 불편했던 순간은 언제였나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-10">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-10" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 10)"></textarea>
+    <div class="status" id="verse-status-revelation-10">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-10">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-10" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 10)"></textarea>
+    <div class="status" id="status-revelation-10">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-9">이전</a>
+    <a class="nav-btn primary" href="#revelation-11">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-11">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 11 · 11/22</div>
+    <h1>요한 묵시록 11장</h1>
+    <p>두 증인과 하느님의 나라 선포</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 믿음을 지키기 위해 불편함을 감수한 적이 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-11">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-11" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 11)"></textarea>
+    <div class="status" id="verse-status-revelation-11">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-11">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-11" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 11)"></textarea>
+    <div class="status" id="status-revelation-11">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-10">이전</a>
+    <a class="nav-btn primary" href="#revelation-12">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-12">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 12 · 12/22</div>
+    <h1>요한 묵시록 12장</h1>
+    <p>여인과 용, 영적 싸움</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 내 삶에서 “보이지 않는 싸움”이 있다는 걸 얼마나 의식하고 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-12">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-12" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 12)"></textarea>
+    <div class="status" id="verse-status-revelation-12">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-12">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-12" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 12)"></textarea>
+    <div class="status" id="status-revelation-12">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-11">이전</a>
+    <a class="nav-btn primary" href="#revelation-13">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-13">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 13 · 13/22</div>
+    <h1>요한 묵시록 13장</h1>
+    <p>짐승의 권세와 유혹</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 세상의 기준을 따라갈 때가 더 많나, 신앙을 따를 때가 더 많나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-13">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-13" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 13)"></textarea>
+    <div class="status" id="verse-status-revelation-13">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-13">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-13" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 13)"></textarea>
+    <div class="status" id="status-revelation-13">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-12">이전</a>
+    <a class="nav-btn primary" href="#revelation-14">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-14">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 14 · 14/22</div>
+    <h1>요한 묵시록 14장</h1>
+    <p>어린양을 따르는 이들과 심판의 경고</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 하느님 편에 서는 선택을 할 때 무엇이 가장 걸리나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-14">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-14" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 14)"></textarea>
+    <div class="status" id="verse-status-revelation-14">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-14">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-14" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 14)"></textarea>
+    <div class="status" id="status-revelation-14">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-13">이전</a>
+    <a class="nav-btn primary" href="#revelation-15">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-15">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 15 · 15/22</div>
+    <h1>요한 묵시록 15장</h1>
+    <p>마지막 재앙을 앞둔 찬양</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 하느님의 정의를 믿지만, 동시에 두려워한 적도 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-15">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-15" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 15)"></textarea>
+    <div class="status" id="verse-status-revelation-15">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-15">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-15" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 15)"></textarea>
+    <div class="status" id="status-revelation-15">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-14">이전</a>
+    <a class="nav-btn primary" href="#revelation-16">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-16">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 16 · 16/22</div>
+    <h1>요한 묵시록 16장</h1>
+    <p>일곱 대접 재앙</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">고난이 올 때 나는 하느님께 더 가까워지나, 원망하나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-16">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-16" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 16)"></textarea>
+    <div class="status" id="verse-status-revelation-16">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-16">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-16" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 16)"></textarea>
+    <div class="status" id="status-revelation-16">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-15">이전</a>
+    <a class="nav-btn primary" href="#revelation-17">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-17">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 17 · 17/22</div>
+    <h1>요한 묵시록 17장</h1>
+    <p>큰 바빌론의 유혹</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 겉으로 화려하지만 속은 비어있는 것에 끌린 적 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-17">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-17" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 17)"></textarea>
+    <div class="status" id="verse-status-revelation-17">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-17">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-17" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 17)"></textarea>
+    <div class="status" id="status-revelation-17">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-16">이전</a>
+    <a class="nav-btn primary" href="#revelation-18">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-18">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 18 · 18/22</div>
+    <h1>요한 묵시록 18장</h1>
+    <p>바빌론의 멸망과 세상의 집착</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">내가 내려놓기 가장 어려운 것은 무엇인가?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-18">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-18" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 18)"></textarea>
+    <div class="status" id="verse-status-revelation-18">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-18">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-18" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 18)"></textarea>
+    <div class="status" id="status-revelation-18">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-17">이전</a>
+    <a class="nav-btn primary" href="#revelation-19">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-19">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 19 · 19/22</div>
+    <h1>요한 묵시록 19장</h1>
+    <p>어린양의 혼인 잔치와 승리</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 하느님의 승리를 “머리로만” 믿나, “기대하며” 살고 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-19">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-19" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 19)"></textarea>
+    <div class="status" id="verse-status-revelation-19">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-19">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-19" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 19)"></textarea>
+    <div class="status" id="status-revelation-19">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-18">이전</a>
+    <a class="nav-btn primary" href="#revelation-20">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-20">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 20 · 20/22</div>
+    <h1>요한 묵시록 20장</h1>
+    <p>마지막 심판</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 내 삶이 언젠가 평가받는다는 걸 의식하며 살고 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-20">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-20" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 20)"></textarea>
+    <div class="status" id="verse-status-revelation-20">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-20">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-20" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 20)"></textarea>
+    <div class="status" id="status-revelation-20">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-19">이전</a>
+    <a class="nav-btn primary" href="#revelation-21">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-21">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 21 · 21/22</div>
+    <h1>요한 묵시록 21장</h1>
+    <p>새 하늘과 새 땅</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">나는 지금 삶보다 더 좋은 “하느님과 함께하는 삶”을 진짜 바라고 있나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-21">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-21" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 21)"></textarea>
+    <div class="status" id="verse-status-revelation-21">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-21">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-21" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 21)"></textarea>
+    <div class="status" id="status-revelation-21">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-20">이전</a>
+    <a class="nav-btn primary" href="#revelation-22">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+<section class="reader card purple" id="revelation-22">
+  <div class="reader-top">
+    <a class="back" href="#home">‹ 책 선택</a>
+    <div class="badge">🌌 요한 묵시록</div>
+  </div>
+
+  <div class="date-pill">날짜: <input type="date" id="datePicker" onchange="changeDate()" style="border:none;background:transparent;font-size:14px;font-weight:700;"></div>
+
+  <div class="chapter-head">
+    <div class="day">DAY 22 · 22/22</div>
+    <h1>요한 묵시록 22장</h1>
+    <p>생명수의 강과 마지막 초대</p>
+  </div>
+
+  <div class="question-card">
+    <div class="q-label">오늘의 질문</div>
+    <div class="question">오늘 하루, 나는 하느님과 얼마나 가까웠다고 느끼나?</div>
+  </div>
+
+  <div class="field">
+    <label for="verse-revelation-22">마음에 와 닿은 성경구절</label>
+    <textarea id="verse-revelation-22" placeholder="예: 사무엘상 1,27 — 내가 드린 청을 주님께서 들어주셨다." oninput="saveVerse('revelation', 22)"></textarea>
+    <div class="status" id="verse-status-revelation-22">구절 자동 저장 준비됨</div>
+  </div>
+
+  <div class="field">
+    <label for="memo-revelation-22">오늘 묵상 메모</label>
+    <textarea id="memo-revelation-22" placeholder="오늘 느낀 점을 솔직하게 적어봐." oninput="saveMemo('revelation', 22)"></textarea>
+    <div class="status" id="status-revelation-22">메모 자동 저장 준비됨</div>
+  </div>
+
+  <div class="nav-row">
+    <a class="nav-btn secondary" href="#revelation-21">이전</a>
+    <a class="nav-btn primary" href="#revelation-1">다음</a>
+  </div>
+
+  <div class="jump-wrap">
+    <div class="mini-title">장 바로가기</div>
+    <nav class="jump"><a href="#revelation-1" data-book="revelation" data-chapter="1">1</a><a href="#revelation-2" data-book="revelation" data-chapter="2">2</a><a href="#revelation-3" data-book="revelation" data-chapter="3">3</a><a href="#revelation-4" data-book="revelation" data-chapter="4">4</a><a href="#revelation-5" data-book="revelation" data-chapter="5">5</a><a href="#revelation-6" data-book="revelation" data-chapter="6">6</a><a href="#revelation-7" data-book="revelation" data-chapter="7">7</a><a href="#revelation-8" data-book="revelation" data-chapter="8">8</a><a href="#revelation-9" data-book="revelation" data-chapter="9">9</a><a href="#revelation-10" data-book="revelation" data-chapter="10">10</a><a href="#revelation-11" data-book="revelation" data-chapter="11">11</a><a href="#revelation-12" data-book="revelation" data-chapter="12">12</a><a href="#revelation-13" data-book="revelation" data-chapter="13">13</a><a href="#revelation-14" data-book="revelation" data-chapter="14">14</a><a href="#revelation-15" data-book="revelation" data-chapter="15">15</a><a href="#revelation-16" data-book="revelation" data-chapter="16">16</a><a href="#revelation-17" data-book="revelation" data-chapter="17">17</a><a href="#revelation-18" data-book="revelation" data-chapter="18">18</a><a href="#revelation-19" data-book="revelation" data-chapter="19">19</a><a href="#revelation-20" data-book="revelation" data-chapter="20">20</a><a href="#revelation-21" data-book="revelation" data-chapter="21">21</a><a href="#revelation-22" data-book="revelation" data-chapter="22">22</a></nav>
+  </div>
+
+  <div class="history">
+    <div class="history-title">날짜별 기록</div>
+    <div class="historyList"></div>
+  </div>
+</section>
+</div>
+
+<script>
+let selectedDate = null;
+function today(){
+  var d=new Date();
+  var y=d.getFullYear();
+  var m=String(d.getMonth()+1).padStart(2,"0");
+  var day=String(d.getDate()).padStart(2,"0");
+  return selectedDate || (y+"-"+m+"-"+day);
+}
+function changeDate(){
+  const picker=document.getElementById("datePicker");
+  selectedDate = picker.value;
+  loadAll();
+}
+function memoKey(book, chapter, date){return "bible_allinone_memo_"+book+"_"+chapter+"_"+(date||today());}
+function verseKey(book, chapter, date){return "bible_allinone_verse_"+book+"_"+chapter+"_"+(date||today());}
+function datesKey(book, chapter){return "bible_allinone_dates_"+book+"_"+chapter;}
+
+function addDate(book, chapter, date){
+  var k=datesKey(book,chapter);
+  var arr=[];
+  try{arr=JSON.parse(localStorage.getItem(k)||"[]");}catch(e){arr=[];}
+  if(arr.indexOf(date)<0){arr.push(date);arr.sort().reverse();}
+  localStorage.setItem(k,JSON.stringify(arr));
+}
+
+function saveMemo(book, chapter){
+  var box=document.getElementById("memo-"+book+"-"+chapter);
+  var status=document.getElementById("status-"+book+"-"+chapter);
+  if(box){
+    localStorage.setItem(memoKey(book,chapter),box.value);
+    if(box.value.trim()) addDate(book,chapter,today());
+    if(status)status.textContent="자동 저장됨";
+    updateAllStatus();
+    renderHistory(book,chapter);
+  }
+}
+function saveVerse(book, chapter){
+  var box=document.getElementById("verse-"+book+"-"+chapter);
+  var status=document.getElementById("verse-status-"+book+"-"+chapter);
+  if(box){
+    localStorage.setItem(verseKey(book,chapter),box.value);
+    if(box.value.trim()) addDate(book,chapter,today());
+    if(status)status.textContent="구절 자동 저장됨";
+    updateAllStatus();
+    renderHistory(book,chapter);
+  }
+}
+function isTodayDone(book, chapter){
+  var m=(localStorage.getItem(memoKey(book,chapter))||"").trim();
+  var v=(localStorage.getItem(verseKey(book,chapter))||"").trim();
+  return !!(m || v);
+}
+function updateAllStatus(){
+  document.querySelectorAll(".jump a").forEach(function(a){
+    var b=a.dataset.book;
+    var ch=a.dataset.chapter;
+    a.classList.remove("","today-done");
+    if(!b || !ch) return;
+    if(isTodayDone(b,ch)) a.classList.add("today-done");
+    else a.classList.add("");
+  });
+}
+function escapeHtml(str){
+  return str.replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c];
+  });
+}
+function renderHistory(book, chapter){
+  var section=document.getElementById(book+"-"+chapter);
+  if(!section) return;
+  var list=section.querySelector(".historyList");
+  if(!list) return;
+  var arr=[];
+  try{arr=JSON.parse(localStorage.getItem(datesKey(book,chapter))||"[]");}catch(e){arr=[];}
+  if(isTodayDone(book,chapter) && arr.indexOf(today())<0) arr.unshift(today());
+  if(!arr.length){
+    list.innerHTML='<div class="historyEmpty">아직 저장된 기록이 없어.</div>';
+    return;
+  }
+  list.innerHTML=arr.map(function(date){
+    var verse=(localStorage.getItem(verseKey(book,chapter,date))||"").trim();
+    var memo=(localStorage.getItem(memoKey(book,chapter,date))||"").trim();
+    if(!verse && !memo) return "";
+    return '<div class="historyItem"><div class="historyDate">'+date+'</div>'
+      + (verse?'<div><b>구절</b><br>'+escapeHtml(verse)+'</div>':'')
+      + (memo?'<div style="margin-top:8px"><b>메모</b><br>'+escapeHtml(memo)+'</div>':'')
+      + '</div>';
+  }).join("") || '<div class="historyEmpty">아직 저장된 기록이 없어.</div>';
+}
+function loadAll(){
+  const picker=document.getElementById("datePicker");
+if(picker && !picker.value){
+  const d=new Date();
+  picker.value = d.toISOString().split('T')[0];
+  selectedDate = picker.value;
+}
+document.querySelectorAll(".todayDate").forEach(function(el){el.textContent=today();});
+  document.querySelectorAll("textarea[id^='memo-']").forEach(function(box){
+    var p=box.id.split("-");
+    box.value=localStorage.getItem(memoKey(p[1],p[2]))||"";
+  });
+  document.querySelectorAll("textarea[id^='verse-']").forEach(function(box){
+    var p=box.id.split("-");
+    box.value=localStorage.getItem(verseKey(p[1],p[2]))||"";
+  });
+  document.querySelectorAll(".reader").forEach(function(sec){
+    var p=sec.id.split("-");
+    if(p.length>=2) renderHistory(p[0],p[1]);
+  });
+  updateAllStatus();
+}
+loadAll();
+</script>
+</body>
+</html>
